@@ -7,6 +7,9 @@ ENV['RAILS_ENV'] = 'development'
 # Specifies gem version of Rails to use when vendor/rails is not present
 #RAILS_GEM_VERSION = '2.0.1' unless defined? RAILS_GEM_VERSION
 
+# relative url stuff since app is on a sub_url
+RAILS_APPLICATION_PREFIX = 'sprolog'
+
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
@@ -37,6 +40,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
+    :tmpdir => '/home/f0/html/tmp',
     :session_key => '_mapt_session',
     :secret      => '0b7742b62cce4c417c78a8c40c6f61c3349ffa5e2dc1feb96dd62efae8f8c6d463020f2cfd57dd4f58dbf53d545058e6bf16908280670b2e8fe034b23d111d98'
   }
@@ -44,7 +48,7 @@ Rails::Initializer.run do |config|
   # Use the database for sessions instead of the cookie-based default,
   # which shouldn't be used to store highly confidential information
   # (create the session table with 'rake db:sessions:create')
-  # config.action_controller.session_store = :active_record_store
+  config.action_controller.session_store = :p_store
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,
@@ -56,11 +60,8 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+  config.action_controller.relative_url_root = '/' + RAILS_APPLICATION_PREFIX
 end
-
-# relative url stuff since app is on a sub_url
-RAILS_APPLICATION_PREFIX = 'sprolog'
-ActionController::AbstractRequest.relative_url_root = '/' + RAILS_APPLICATION_PREFIX
 # requrements for PDF
 Mime::Type.register 'application/pdf', :pdf
 require 'htmldoc'
